@@ -1,0 +1,16 @@
+[Unit]
+Description=ChatBot
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+Type=forking
+WorkingDirectory=/var/www/chatbot
+LimitNOFILE=4096
+ExecStart=/var/www/chatbot/server_start.sh
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

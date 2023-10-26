@@ -1,0 +1,19 @@
+version: "3"
+services:
+    app:
+        container_name: chatbot-api
+        build: ./api
+        ports:
+          - "3000:3000"
+        expose:
+          - "3000"
+        volumes:
+          - ./api:/var/www/chatbot/api
+
+    ui:
+        container_name: chatbot-ui
+        build: ./ui
+        ports:
+            - "80:80"
+        expose:
+            - "80"

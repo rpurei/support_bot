@@ -1,0 +1,51 @@
+<mat-toolbar color="primary" class="mat-drawer">
+  <mat-icon style="margin-right: 10px;">forum</mat-icon>
+  <span>Сервис чат-ботов</span>
+</mat-toolbar>
+
+<div class="container mat-mdc-card mdc-card" style="width: 60%; margin: 10vh auto auto;"> <!--border: 1px solid #3f51b5;-->
+<div class="mat-typography conversation-header"style="margin-top: 2vh;">
+<h2 style="padding: 10px; margin-right: 2rem;">Бот поддержки</h2>
+</div>
+
+<mat-divider color="primary"></mat-divider>
+<mat-list dense class="conversation-history mat-typography" id="history" style="max-height: 70vh; overflow: auto;">
+  <mat-list-item *ngFor="let data of webSocketService.receivedData" style="height: auto;">
+    <mat-card *ngIf="data.side == 'human'" style="background-color: #e9ebff; margin: 20px 20px 20px 55%; max-width: 45%;">
+      <mat-card-header>
+        <mat-card-title><mat-icon color="primary">face</mat-icon></mat-card-title>
+        <mat-card-subtitle>{{ data.time }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content style="word-wrap: break-word; white-space: pre-wrap;">
+        <p style="margin: 20px;">{{ data.message }}</p>
+      </mat-card-content>
+      <mat-card-footer>
+      </mat-card-footer>
+    </mat-card>
+    <mat-card *ngIf="data.side == 'bot'" style="background-color: #fce9ff; margin: 20px 55% 40px 20px; max-width: 45%;">
+      <mat-card-header>
+        <mat-card-title><mat-icon color="accent">android</mat-icon></mat-card-title>
+        <mat-card-subtitle>{{ data.time }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content style="word-wrap: break-word; white-space: pre-wrap;">
+        <p style="margin: 20px;">{{ data.message }}</p>
+      </mat-card-content>
+      <mat-card-footer>
+      </mat-card-footer>
+      {{ scroll_bottom() }}
+    </mat-card>
+  </mat-list-item>
+</mat-list>
+
+<div class="conversation-input">
+  <mat-divider></mat-divider>
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Напишите боту что-нибудь хорошее..." id="message_to_bot" [(ngModel)]="message" (keyup.enter)="sendMessage(message); this.message=''">
+    <mat-icon *ngIf="this.webSocketService.receivedData.at(this.webSocketService.receivedData.length - 1)?.side == 'bot' || this.webSocketService.receivedData.length == 0" matSuffix (click)="sendMessage(message); this.message=''" color="accent">send</mat-icon>
+    <mat-progress-bar *ngIf="this.webSocketService.receivedData.at(this.webSocketService.receivedData.length - 1)?.side == 'human'" mode="indeterminate"></mat-progress-bar>
+  </mat-form-field>
+</div>
+
+</div>
+
+<router-outlet></router-outlet>
